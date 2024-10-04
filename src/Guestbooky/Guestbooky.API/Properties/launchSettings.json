@@ -1,0 +1,51 @@
+{
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ACCESS_USERNAME": "testy",
+        "ACCESS_PASSWORD": "tester",
+        "ACCESS_TOKENKEY": "youbetterbesureyouareusingatokenkey",
+        "ACCESS_ISSUER": "https://casorio.cotti.com.br/livro/api",
+        "ACCESS_AUDIENCE": "https://casorio.cotti.com.br/livro",
+        "CLOUDFLARE_SECRET": "0x4AAAAAAAiNCjAYE4Eeu1MIjSiHufs-2n0",
+        "MONGODB_CONNECTIONSTRING": "mongodb://guestbookyuser:guestbookypassword@localhost:27017/Guestbooky",
+        "MONGODB_DATABASENAME": "Guestbooky",
+        "CORS_ORIGINS": "https://casorio.cotti.com.br,http://localhost:8080,http://localhost:5008",
+        "LOG_LEVEL": "DEBUG"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5008"
+    },
+    "https": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7196;http://localhost:5008"
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:4774",
+      "sslPort": 44307
+    }
+  }
+}

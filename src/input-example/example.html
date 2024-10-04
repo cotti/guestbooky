@@ -1,0 +1,155 @@
+<!-- Yes, this is a jolly good page with all styles glued in. Don't worry, the JS portion is here too. This way you don't need to check multiple files
+                                                                                                       And I get to save space? No, actually not. 
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Guestbook usage example with the captcha</title>
+        <style>
+            body {
+                margin: 0;
+                background-color: aliceblue;
+                font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                font-size: 10pt;
+            }
+        
+            #guestbookForm form {
+                display: table;
+                margin: 0;
+                align-items: center;
+                font-size: 1.2em;
+                justify-items: center;
+            }
+        
+            #guestbookForm field {
+                display: table-row;
+                margin: 4pt 4pt 4pt 4pt;
+                padding: 4pt 4pt 4pt 4pt;
+            }
+        
+            #guestbookForm label {
+                display: table-cell;
+                height: auto;
+                vertical-align: middle;
+                font-size: 1.2em;
+                text-align: right;
+                padding-right: 0.2em;
+            }
+        
+            #guestbookForm input, textarea {
+                display: table-cell;
+                border: 0.2em hsl(78, 75%, 51%) outset;
+                box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .5);
+                border-radius: 0.4em;
+                padding: 0.5em 0.5em;
+                margin: 0.5em;
+                font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                font-size: 1.2em;
+                resize: vertical;
+                min-height: 1.2em;
+            }
+        
+            #guestbookForm input:focus, textarea:focus {
+                outline: none;
+            }
+        
+            #guestbookForm div {
+                padding: 2pt;
+            }
+        
+            #guestbookForm button {
+                font-size: 1.4em;
+                padding: 0.5em 1.5em;
+                margin: 2pt 3pt;
+                border-radius: 0.4em;
+                background-color: hsl(81, 75%, 51%);
+            }
+        
+            .form-div {
+                margin: 5em auto;
+                width: fit-content;
+                height: fit-content;
+                align-self: center;
+                justify-self: center;
+            }
+        </style>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    </head>
+
+    <body>
+        <div class="form-div">
+            <h1>Sample guestbooky input page</h1>
+            <!-- A form should be defined with the action pointing to the backend's message endpoint, where the POST with the message will be sent. -->
+            <form id="guestbookForm" action="http://example.guestbook.com/message" method="POST">
+                <field>
+                    <label for="author">Name: </label>
+                    <input type="text" id="author" placeholder="Please add your name!" cols="40" maxlength="128" minlength="1" required />
+                </field>
+                <field>
+                    <label for="author">Message: </label>
+                    <textarea id="message" placeholder="Please add your message!" cols="60" rows="6" maxlength="4096" minlength="1" required></textarea>
+                </field>
+                <!-- Cloudflare contains more data on how to further customize the captcha. The site key is also provided in the control panel. -->
+                <!-- Refer to https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/ for more options. -->
+                <!-- Once the challenge is executed, the data is sent to the hidden field in the form through the setCaptchaResponse callback defined in the script below. -->
+                <field>
+                    <label></label>
+                    <div class="cf-turnstile" data-sitekey="0x00000000000000000000000" data-callback="setCaptchaResponse"></div>
+                    <input type="hidden" id="captchaResponse" name="captchaResponse" />
+                </field>
+                <field>
+                    <label></label>
+                    <button type="submit" value="Submit">Send</button>
+                </field>
+            </form>
+        </div>
+
+<!-- Now, the script. 
+    -> setCaptchaResponse(): callback from the turnstile to the hidden field
+    -> Event Listener: Listens to the submit event from the form, acquires the values and sends the POST request as structured JSON.
+                       Once a response pops back we can check if it worked or not. This is rather crude just to get it working in a development setting.
+                       Hopefully if this ever gets used it is tinkered with a bit.
+-->
+
+        <script>
+function setCaptchaResponse(token) {
+  document.getElementById("captchaResponse").value = token;
+}
+
+document
+  .getElementById("guestbookForm")
+  .addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const author = document.getElementById("author").value;
+    const message = document.getElementById("message").value;
+    const captchaResponse = document.getElementById("captchaResponse").value;
+
+    const data = {
+      author,
+      message,
+      captchaResponse,
+    };
+
+    const response = await fetch(this.action, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Note added successfully!");
+      this.reset(); // Clear the form fields
+    } else {
+      alert(result.errorMessage);
+    }
+  });
+        </script>
+    </body>
+</html>

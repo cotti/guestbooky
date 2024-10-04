@@ -1,0 +1,40 @@
+services:
+
+  guestbooky-be:
+    build:
+      context: ../
+      dockerfile: build/guestbooky-be/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - CORS_ORIGINS=https://guestbooky.example.com
+      - ACCESS_USERNAME=user
+      - ACCESS_PASSWORD=pass
+      - ACCESS_TOKENKEY=youbetterbesureyouareusingatokenkey
+      - ACCESS_ISSUER=https://guestbooky.example.com/api
+      - ACCESS_AUDIENCE=https://guestbooky.example.com
+      - CLOUDFLARE_SECRET=0x000000000000000000000000000000000
+      - MONGODB_CONNECTIONSTRING=mongodb://mongouser:mongopass@mongo:27017/Guestbooky
+      - MONGODB_DATABASENAME=Guestbooky
+      - LOG_LEVEL=Debug
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    volumes:
+      - ./mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./mongodb/mongod.conf:/etc/mongod.conf:ro
+      - mongodata:/data/db
+    command: ["mongod", "--config", "/etc/mongod.conf"]
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodata:
