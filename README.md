@@ -8,8 +8,8 @@
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/cotti/MessengerPlusSoundBankExtractor.svg)](https://github.com/cotti/MessengerPlusSoundBankExtractor/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/cotti/MessengerPlusSoundBankExtractor.svg)](https://github.com/cotti/MessengerPlusSoundBankExtractor/pulls)
+[![GitHub Issues](https://img.shields.io/github/issues/cotti/guestbooky.svg)](https://github.com/cotti/guestbooky/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/cotti/guestbooky.svg)](https://github.com/cotti/guestbooky/pulls)
 [![License](https://img.shields.io/badge/license-AGPLv3-003300.svg)](/LICENSE)
 
 </div>
@@ -23,12 +23,15 @@
 
 ## 📝 Table of Contents
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Deployment](#deployment)
-- [Usage](#usage)
-- [Built Using](#built_using)
-- [Authors](#authors)
+
+- [📝 Table of Contents](#-table-of-contents)
+- [🧐 About ](#-about-)
+- [🏁 Getting Started ](#-getting-started-)
+- [🕸️ Prerequisites](#️-prerequisites)
+- [🎈 Usage ](#-usage-)
+- [🚀 Deployment ](#-deployment-)
+- [⛏️ Built Using ](#️-built-using-)
+- [✍️ Authors ](#️-authors-)
 
 ## 🧐 About <a name = "about"></a>
 
@@ -40,7 +43,7 @@ It includes many concepts that are very reasonable to tinker with as learning ma
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
-### Prerequisites
+## 🕸️ Prerequisites
 
 - .NET 8.0
 - A running instance of MongoDB
@@ -59,6 +62,7 @@ You will be able to see in `build/docker-compose.public.yml` that the applicatio
       - CLOUDFLARE_SECRET=0x000000000000000000000000000000000
       - MONGODB_CONNECTIONSTRING=mongodb://mongouser:mongopass@mongo:27017/Guestbooky
       - MONGODB_DATABASENAME=Guestbooky
+      - LOG_LEVEL=Debug
 ```
 
 You will need to set them up either by hand or by using your IDE's capabilities. On Visual Studio, that can be done via the Debug Properties of Guestbooky.API.
@@ -68,6 +72,8 @@ You will need to set them up either by hand or by using your IDE's capabilities.
 **CLOUDFLARE_SECRET** -> The turnstile secret, used in the server portion of the captcha check.
 
 **MONGODB_\*** -> Related to the connection to MongoDB. Yeah.
+
+**LOG_\*** -> Logging.
 
 ## 🎈 Usage <a name="usage"></a>
 
