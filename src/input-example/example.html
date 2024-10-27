@@ -133,22 +133,23 @@ document
       captchaResponse,
     };
 
-    const response = await fetch(this.action, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const dataJson = JSON.stringify(data);
 
-    if (response.status >= 200 && response.status <= 299) {
-      alert("Note added successfully!");
-      this.reset(); // Clear the form fields
-    } else {
-        const problem = await response.json();
-        alert(problem);
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", this.action, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader('Content-Length', dataJson.length);
+    xhr.send(dataJson);
+
+    xhr.onload = function () {
+      if (xhr.status >= 200 && xhr.status <= 299) {
+           alert("Message sent successfully.");
+           this.reset(); // Clear the form fields
+      } else {
+           alert("An error " + xhr.status + "occurred: " + xhr.responseText);
+      }
     }
-  });
+});
         </script>
     </body>
 </html>

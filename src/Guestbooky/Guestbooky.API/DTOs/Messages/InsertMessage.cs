@@ -17,6 +17,6 @@ public record InsertMessageRequestDto
 
     [JsonPropertyName("captchaResponse")]
     [Required(ErrorMessage = "The captcha challenge response is required")]
-    [StringLength(1024)]
+    [StringLength(2048)]
     public string CaptchaResponse { get; init; }
 }
