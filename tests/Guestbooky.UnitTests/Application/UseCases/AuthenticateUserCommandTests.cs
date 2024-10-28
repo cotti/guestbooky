@@ -3,11 +3,6 @@ using Guestbooky.Application.UseCases.AuthenticateUser;
 using Guestbooky.Domain.Abstractions.Infrastructure;
 using Guestbooky.Domain.Entities.User;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Guestbooky.UnitTests.Application.UseCases;
 

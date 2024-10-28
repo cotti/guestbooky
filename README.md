@@ -26,9 +26,9 @@
 
 - [📝 Table of Contents](#-table-of-contents)
 - [🧐 About ](#-about-)
+- [📑 Documentation ](#-documentation-)
 - [🏁 Getting Started ](#-getting-started-)
 - [🕸️ Prerequisites](#️-prerequisites)
-- [🎈 Usage ](#-usage-)
 - [🚀 Deployment ](#-deployment-)
 - [⛏️ Built Using ](#️-built-using-)
 - [✍️ Authors ](#️-authors-)
@@ -39,16 +39,21 @@ I really need to get my hands dirty from time to time, so I figured I'd make a g
 
 It includes many concepts that are very reasonable to tinker with as learning material, in a bite-sized project complexity that allows me to talk about it without losing the breadcrumb trail.
 
+## 📑 Documentation <a name = "documentation"></a>
+
+[Comments and general documentation/musings on the project](docs/comments.md)
+
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
 ## 🕸️ Prerequisites
 
+For running it locally:
 - .NET 8.0
 - A running instance of MongoDB
 - A Cloudflare turnstile secret key for the captcha
-- Not forget to set up environment variables
+- Not forgetting to set up environment variables
 
 You will be able to see in `build/docker-compose.public.yml` that the application makes heavy usage of them.
 ```
@@ -65,19 +70,19 @@ You will be able to see in `build/docker-compose.public.yml` that the applicatio
       - LOG_LEVEL=Debug
 ```
 
-You will need to set them up either by hand or by using your IDE's capabilities. On Visual Studio, that can be done via the Debug Properties of Guestbooky.API.
+> [!IMPORTANT]
+ You will need to set them up either by hand or by using your IDE's capabilities. On Visual Studio, that can be done via the Debug Properties of Guestbooky.API.
 
-**CORS_ORIGINS**, **ACCESS_\*** -> variables related to JWT issuing and checking. In order to use the GET and DELETE endpoints for the messages, you need to use a bearer token.
+|Env Variable Keys|Usage|
+|----|----|
+|**CORS_ORIGINS**, **ACCESS_\***|Variables related to JWT issuing and checking. In order to use the GET and DELETE endpoints for the messages, you need to use a bearer token.|
+|**CLOUDFLARE_SECRET**|The turnstile secret, used in the server portion of the captcha check.|
+|**MONGODB_\***|Related to the connection to MongoDB. Yeah.|
+|**LOG_\***|Logging.|
 
-**CLOUDFLARE_SECRET** -> The turnstile secret, used in the server portion of the captcha check.
 
-**MONGODB_\*** -> Related to the connection to MongoDB. Yeah.
-
-**LOG_\*** -> Logging.
-
-## 🎈 Usage <a name="usage"></a>
-
-For local usage of the backend, you can use `docker-compose.local.yml` and edit the fields you need.
+> [!TIP]
+> For local usage of the backend, you can use `docker-compose.local.yml` and edit the fields you need.
 
 ## 🚀 Deployment <a name = "deployment"></a>
 
