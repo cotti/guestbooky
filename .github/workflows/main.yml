@@ -1,0 +1,36 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - '**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore src/Guestbooky/Guestbooky.sln
+
+      - name: Run unit tests
+        run: dotnet test tests/Guestbooky.UnitTests/Guestbooky.UnitTests.csproj
+
+      - name: Build/push Docker image (main)
+        if: github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v6.9
+        with:
+          context: .
+          push: true
+          tags: cotti/guestbooky-be:latest
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
