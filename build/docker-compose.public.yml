@@ -1,9 +1,7 @@
 services:
 
   guestbooky-be:
-    build:
-      context: ../
-      dockerfile: build/guestbooky-be/Dockerfile
+    image: cotti/guestbooky-be
     container_name: guestbooky-be
     ports:
       - "8080:8080"

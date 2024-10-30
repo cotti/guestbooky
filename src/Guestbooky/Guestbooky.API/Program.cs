@@ -74,9 +74,10 @@ namespace Guestbooky.API
                 var corsOrigins = builder.Configuration[Constants.CORS_ORIGINS]?.Split(',') ?? Array.Empty<string>();
                 cfg.AddPolicy(name: "local", policy =>
                 {
-                    policy.WithOrigins(corsOrigins);
-                    policy.AllowAnyHeader();
-                    policy.AllowAnyMethod();
+                    policy.WithExposedHeaders("Content-Range", "Accept-Ranges")
+                    .WithOrigins(corsOrigins)
+                    .AllowAnyHeader()
+                    .WithMethods("GET", "POST", "DELETE", "OPTIONS");
                 });
             });
 
