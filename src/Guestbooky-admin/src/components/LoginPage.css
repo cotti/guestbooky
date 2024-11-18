@@ -62,3 +62,20 @@ form button {
     font-family: 'Solway', serif;
     font-weight: 300;
 }
+
+@media screen and (max-width: 1200px) {
+    form {
+        grid-template-columns: 1fr;
+        grid-column-gap: initial;
+        grid-row-gap: 2ch;
+    }
+    form * {
+        grid-column: 1;
+    }
+    form label {
+        text-align: left;
+    }
+    form button {
+        grid-column: 1;
+    }
+}
