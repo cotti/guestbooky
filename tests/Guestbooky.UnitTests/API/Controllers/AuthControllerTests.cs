@@ -1,4 +1,5 @@
-﻿using Guestbooky.API.Controllers;
+﻿using Guestbooky.API.Configurations;
+using Guestbooky.API.Controllers;
 using Guestbooky.API.DTOs.Auth;
 using Guestbooky.Application.UseCases.AuthenticateUser;
 using Guestbooky.Application.UseCases.RefreshToken;
@@ -15,18 +16,39 @@ public class AuthControllerTests
 {
     private readonly Mock<IMediator> _mediatorMock;
     private readonly Mock<ILogger<AuthController>> _loggerMock;
+    private readonly APISettings _settings;
 
     public AuthControllerTests()
     {
         _mediatorMock = new Mock<IMediator>();
         _loggerMock = new Mock<ILogger<AuthController>>();
+        _settings = new APISettings() { RunningEnvironment = Guestbooky.API.Enums.RunningEnvironment.Development };
     }
 
     [Fact]
     public async Task Login_ReturnsOk_WhenAuthenticated()
     {
         // Arrange
-        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object);
+        var httpContextMock = new Mock<HttpContext>();
+        var httpResponseMock = new Mock<HttpResponse>();
+        var headers = new HeaderDictionary();
+        var cookies = new Mock<IResponseCookies>();
+
+        httpResponseMock.SetupProperty(r => r.StatusCode);
+        httpResponseMock.SetupGet(r => r.Headers).Returns(headers);
+        httpResponseMock.SetupGet(r => r.Cookies).Returns(cookies.Object);
+        httpContextMock.SetupGet(h => h.Response).Returns(httpResponseMock.Object);
+
+
+
+        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object, _settings)
+        {
+            ControllerContext = new ControllerContext()
+            {
+                HttpContext = httpContextMock.Object
+            }
+
+        };
 
         var requestDto = new LoginRequestDto("testuser", "password");
         
@@ -38,7 +60,9 @@ public class AuthControllerTests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
+        
         var responseDto = Assert.IsType<LoginResponseDto>(okResult.Value);
+        cookies.Verify(c => c.Append("token", It.IsAny<string>(), It.IsAny<CookieOptions>()), Times.Once);
         Assert.Equal("testToken", responseDto.Token);
         Assert.Equal("testRefreshToken", responseDto.RefreshToken);
     }
@@ -47,7 +71,7 @@ public class AuthControllerTests
     public async Task Login_ReturnsUnauthorized_WhenNotAuthenticated()
     {
         // Arrange
-        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object);
+        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object, _settings);
 
         var requestDto = new LoginRequestDto("testuser", "wrongpassword");
 
@@ -66,7 +90,7 @@ public class AuthControllerTests
     public async Task Login_ReturnsProblemDetails_WhenExceptionIsThrown()
     {
         // Arrange
-        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object);
+        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object, _settings);
 
         var requestDto = new LoginRequestDto("testuser", "password");
 
@@ -89,7 +113,7 @@ public class AuthControllerTests
     public async Task RefreshToken_ReturnsOk_WhenTokenMatches()
     {
         // Arrange
-        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object);
+        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object, _settings);
 
         var requestDto = new RefreshTokenRequestDto("refresh");
 
@@ -111,7 +135,7 @@ public class AuthControllerTests
     public async Task RefreshToken_ReturnsUnauthorized_WhenTokenNotMatched()
     {
         // Arrange
-        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object);
+        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object, _settings);
 
         var requestDto = new RefreshTokenRequestDto("refresh");
 
@@ -133,7 +157,7 @@ public class AuthControllerTests
     public async Task RefreshToken_ReturnsProblemDetails_WhenExceptionIsThrown()
     {
         // Arrange
-        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object);
+        var controller = new AuthController(_mediatorMock.Object, _loggerMock.Object, _settings);
 
         var requestDto = new RefreshTokenRequestDto("refresh");
 
