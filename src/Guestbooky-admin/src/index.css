@@ -1,0 +1,40 @@
+@import url(https://fonts.bunny.net/css?family=carattere:400|solway:300,500);
+
+@media (prefers-reduced-motion: reduce){
+    html:focus-within {
+        scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition: none;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+*, *::before, *::after{
+    box-sizing: border-box;
+    transition: all 0.05s ease;
+    animation-duration: initial;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+ }
+
+html:focus-within{
+    scroll-behavior: smooth;
+}
+
+img, picture, svg, video, canvas{
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+body {
+    background: linear-gradient(90deg, hsl(15, 80%, 90%) 0%, hsl(15, 80%, 98%) 5%, hsl(15, 80%, 98%) 95%,  hsl(15, 80%, 90%) 100%);
+    color: hsl(15, 70%, 5%);
+}

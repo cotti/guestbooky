@@ -1,0 +1,64 @@
+.login-form{
+    display: flex;
+    margin-inline: auto;
+    justify-content: center;
+    align-items: center;
+    vertical-align: center;
+    margin-top: 20vh;
+    background-color: hsla(15, 100%, 93%);
+    width: fit-content;
+    padding: 2em;
+    border-radius: 1em;
+    box-shadow: 0.05em 0.05em 0.05em hsla(15, 20%, 20%, 0.5);
+}
+
+.fade-in{
+    opacity: 0;
+    transform: translateY(10vh);
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20vh);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+form {
+    display: grid;
+    grid-template-columns: auto 20ch;
+    grid-column-gap: 2ch;
+    grid-row-gap: 2ch;
+    align-items: center;
+    font-family: 'Solway', serif;
+}
+
+form label {
+    font-size: 1.4em;
+    text-align: right;
+    font-weight: 500;
+}
+
+form input[type=text], form input[type=password] {
+    font-size: 1.4em;
+    border: 0.2em hsl(15, 100%, 50%) outset;
+    border-radius: 0.2em;
+    padding: 0.2em 0.2em;
+    font-weight: 300;
+}
+
+form button {
+    margin-top: 1em;
+    grid-column: 2 / 3;
+    padding: 1em 2em;
+    font-size: 1.4em;
+    border-radius: 0.2em;
+    background-color: hsl(15, 50%, 85%);
+    font-family: 'Solway', serif;
+    font-weight: 300;
+}
