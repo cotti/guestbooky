@@ -53,7 +53,7 @@ namespace Guestbooky.Infrastructure.Persistence.Repositories
             var messageDtos = await _messages.Find(_ => true)
                 .SortBy(x => x.Timestamp)
                 .Skip((int?)offset)
-                .Limit(50)
+                .Limit(10)
                 .ToCursorAsync(cancellationToken);
             return messageDtos.ToEnumerable().Select(MapToDomainModel).ToArray();
         }
