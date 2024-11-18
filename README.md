@@ -17,7 +17,7 @@
 ---
 
 
-<p align="center">A simple yet somehow overdesigned guestbook system featuring a simple control panel <small>(which is a WIP so you'll have to make do with a db manager)</small></p>
+<p align="center">A simple yet somehow overdesigned guestbook system featuring a simple control panel</p>
 
 <p align="center"> This is phase I of the personal backscratchers project.</p>
 
@@ -29,6 +29,8 @@
 - [📑 Documentation ](#-documentation-)
 - [🏁 Getting Started ](#-getting-started-)
 - [🕸️ Prerequisites](#️-prerequisites)
+  - [Backend:](#backend)
+  - [Admin panel:](#admin-panel)
 - [🚀 Deployment ](#-deployment-)
 - [⛏️ Built Using ](#️-built-using-)
 - [✍️ Authors ](#️-authors-)
@@ -48,6 +50,8 @@ It includes many concepts that are very reasonable to tinker with as learning ma
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
 ## 🕸️ Prerequisites
+
+### Backend:
 
 For running it locally:
 - .NET 8.0
@@ -84,6 +88,12 @@ You will be able to see in `build/docker-compose.public.yml` that the applicatio
 > [!TIP]
 > For local usage of the backend, you can use `docker-compose.local.yml` and edit the fields you need.
 
+### Admin panel:
+
+The admin panel is a simple React/Vite app. For development, it should be enough to run `vite` in Guestbooky-admin's `src` folder.
+
+In order to create a live version, adjust the **API_URL** path in `Guestbooky-admin/src/environment/constants.js`, and execute `vite build`.
+
 ## 🚀 Deployment <a name = "deployment"></a>
 
 Use `docker-compose.public.yml` as a basis. it should create the image for you and start running.
@@ -92,6 +102,7 @@ Use `docker-compose.public.yml` as a basis. it should create the image for you a
 
 - [MongoDB](https://www.mongodb.com/) - Database
 - [.NET](https://dot.net/) - Backend
+- [React](https://react.dev/)/[Vite](https://vite.dev) - Admin Panel
 - [Cloudflare Turnstile](https://www.cloudflare.com/pt-br/products/turnstile/) - Captcha
 
 ## ✍️ Authors <a name = "authors"></a>

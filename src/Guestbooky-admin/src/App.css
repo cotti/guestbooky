@@ -1,0 +1,24 @@
+.header{
+    font-size: 3em;
+    word-spacing: 0.3em;
+    letter-spacing: -0.05em;
+    background: linear-gradient(180deg, hsl(15, 80%, 10%) 0%, hsl(15, 50%, 60%) 100%);
+    width: 100%;
+    padding: 2ch;
+    border-bottom: 0.1em solid hsl(15, 80%, 20%);
+}
+
+.header h1 {
+    margin-inline: auto;
+    width: 1200px;
+    color: hsl(15, 100%, 90%);
+    text-shadow: 0.01em 0.01em 0.01em hsl(15, 0%, 20%);
+    font-family: "Carattere", cursive;
+}
+
+.content {
+    width: 1200px;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 2ch;
+}

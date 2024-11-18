@@ -1,11 +1,13 @@
 using Guestbooky.Application.DependencyInjection;
 using Guestbooky.Infrastructure.DependencyInjection;
 using Guestbooky.Infrastructure.Environment;
+using Guestbooky.API.Configurations;
+using Guestbooky.API.Enums;
+using Guestbooky.API.Validations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Serilog;
-using Guestbooky.API.Validations;
 
 namespace Guestbooky.API
 {
@@ -74,9 +76,10 @@ namespace Guestbooky.API
                 var corsOrigins = builder.Configuration[Constants.CORS_ORIGINS]?.Split(',') ?? Array.Empty<string>();
                 cfg.AddPolicy(name: "local", policy =>
                 {
-                    policy.WithExposedHeaders("Content-Range", "Accept-Ranges")
+                    policy.WithExposedHeaders("Content-Range", "Accept-Ranges", "Set-Cookie")
                     .WithOrigins(corsOrigins)
                     .AllowAnyHeader()
+                    .AllowCredentials()
                     .WithMethods("GET", "POST", "DELETE", "OPTIONS");
                 });
             });
@@ -86,7 +89,11 @@ namespace Guestbooky.API
                 options.InvalidModelStateResponseFactory = InvalidModelStateResponseFactory.DefaultInvalidModelStateResponse;
             });
 
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            builder.Services.AddAuthentication(o => 
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(o =>
                 {
                     o.RequireHttpsMetadata = false;
@@ -102,11 +109,21 @@ namespace Guestbooky.API
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero
                     };
+                    o.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies["token"];
+                            return Task.CompletedTask;
+                        }
+                    };
 
                 });
 
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddApplication();
+
+            builder.Services.AddSingleton(new APISettings(){ RunningEnvironment = GetRunningEnvironment(builder.Configuration["ASPNETCORE_ENVIRONMENT"]!) });
 
 
             if (builder.Environment.IsDevelopment())
@@ -168,6 +185,13 @@ namespace Guestbooky.API
             "WARN" => conf.MinimumLevel.Warning(),
             "ERROR" => conf.MinimumLevel.Error(),
             _ => conf.MinimumLevel.Information()
+        };
+
+        public static RunningEnvironment GetRunningEnvironment(string env) => env.ToUpper() switch 
+        {
+            "DEVELOPMENT" => RunningEnvironment.Development,
+            "PRODUCTION" => RunningEnvironment.Production,
+            _ => RunningEnvironment.Unknown
         };
 
     }

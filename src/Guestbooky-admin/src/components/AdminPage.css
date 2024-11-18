@@ -1,0 +1,111 @@
+@keyframes smallFadeIn {
+0% {
+    opacity: 0;
+    transform: translateY(20px);
+}
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+.list-item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: smallFadeIn 0.5s ease-out forwards;
+    animation-delay: calc(0.2s * var(--child-index));
+}
+
+.warning{
+    background-color: hsla(15, 100%, 90%, 0.75);
+    border: 0.2em solid hsla(15, 80%, 70%, 1);
+    border-radius: 0.3em;
+    padding: 2ch 1ch;
+    width: fit-content;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.navigation{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.navigation button {
+    font-size: 1em;
+    margin: 2em;
+    background: hsla(15, 60%, 80%, 1);
+    border-radius: 0.2em;
+    width: fit-content;
+    padding: 0.8em 0.5em;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.navigation button:hover {
+    background: hsla(15, 80%, 90%, 0.75);
+}
+
+ul {
+    list-style-type: none;
+}
+
+ul li{
+    line-height: 1.6em;
+    display: grid;
+    grid-row-gap: 2em;
+    padding: 1em;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr auto auto;
+    font-family: 'Solway', serif;
+}
+
+ul li h2{
+    align-self: center;
+    grid-row: 1;
+    background: linear-gradient(to right, hsl(15, 40%, 85%), hsla(15, 40%, 85%, 0));
+    border-radius: 0.2em;
+    padding: 0.5em 0 0.5em 0.5em;
+    font-weight: 500;
+}
+
+ul li h3{
+    align-self: center;
+    grid-row: 1;
+    justify-self: right;
+    padding-right: 0.5em;
+    vertical-align: bottom;
+    font-weight: 500;
+}
+
+
+ul li button{
+    grid-row: 1;
+    justify-self: right;
+    width: fit-content;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    background: hsla(15, 60%, 80%, 0.75);
+}
+ul li button:hover {
+    background: hsla(15, 80%, 90%, 0.75);
+}
+.message-text {
+    grid-row: 2;
+    grid-column: 1 / 4;
+    background-color: hsl(15, 50%, 90%);
+    margin: 1em 0.5em;
+    padding: 1em 0.5em;
+    font-weight: 300;
+    border-radius: 0.5em;
+    box-shadow: 0.05em 0.05em 0.05em hsla(15, 20%, 20%, 0.5);
+}
+
+.message-text p{
+    line-height: 1.5em;
+    text-align: justify;
+    text-justify: inter-word;
+    text-align-last: left;
+}

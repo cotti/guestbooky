@@ -1,4 +1,5 @@
-﻿using Guestbooky.API.DTOs.Auth;
+﻿using Guestbooky.API.Configurations;
+using Guestbooky.API.DTOs.Auth;
 using Guestbooky.Application.UseCases.AuthenticateUser;
 using Guestbooky.Application.UseCases.RefreshToken;
 using MediatR;
@@ -12,11 +13,13 @@ public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly ILogger<AuthController> _logger;
+    private readonly APISettings _apiSettings;
 
-    public AuthController(IMediator mediator, ILogger<AuthController> logger)
+    public AuthController(IMediator mediator, ILogger<AuthController> logger, APISettings apiSettings)
     {
         _mediator = mediator;
         _logger = logger;
+        _apiSettings = apiSettings;
     }
 
     [ProducesResponseType(typeof(LoginResponseDto), 200)]
@@ -35,6 +38,7 @@ public class AuthController : ControllerBase
             if(result.IsAuthenticated)
             {
                 _logger.LogInformation("Authentication successful. Returning LoginResponse.");
+                SetJwtCookie(result.Token);
                 return Ok(new LoginResponseDto(result.Token, result.RefreshToken));
             }
             else
@@ -79,5 +83,17 @@ public class AuthController : ControllerBase
             _logger.LogError(e, "An exception occurred upon trying to refresh the token. Returning server error.");
             return Problem($"An error occurred on the server: {e.Message}", statusCode: StatusCodes.Status500InternalServerError);
         }
+    }
+
+    private void SetJwtCookie(string token)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = _apiSettings.RunningEnvironment == Enums.RunningEnvironment.Production,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddHours(2)
+        };
+        Response.Cookies.Append("token", token, cookieOptions);
     }
 }
