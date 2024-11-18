@@ -29,15 +29,21 @@
 - [📑 Documentation ](#-documentation-)
 - [🏁 Getting Started ](#-getting-started-)
 - [🕸️ Prerequisites](#️-prerequisites)
-  - [Backend:](#backend)
-  - [Admin panel:](#admin-panel)
+  - [Backend](#backend)
+  - [Admin panel](#admin-panel)
 - [🚀 Deployment ](#-deployment-)
+  - [Backend](#backend-1)
+  - [Admin Panel](#admin-panel-1)
 - [⛏️ Built Using ](#️-built-using-)
 - [✍️ Authors ](#️-authors-)
 
 ## 🧐 About <a name = "about"></a>
 
-I really need to get my hands dirty from time to time, so I figured I'd make a guestbook for my marriage hotsite. And make everyone else see this code.
+Guestbooky proposes something slightly deviating from the usual guestbook taken from 1998: while we gladly accept your messages, thank you very much, reading them is limited to the receiver. *I mean, of course they can show them to others should they want-*
+
+<p align="center"><img src="docs/guestbooky-admin.png" alt="Guestbooky Admin Panel"/></p>
+
+That means it is something useful for engaged couples and other folks with a moment or two to set everything up. I really need to get my hands dirty from time to time, so I figured I'd make a guestbook for my marriage hotsite. And make everyone else see this code.
 
 It includes many concepts that are very reasonable to tinker with as learning material, in a bite-sized project complexity that allows me to talk about it without losing the breadcrumb trail.
 
@@ -51,7 +57,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## 🕸️ Prerequisites
 
-### Backend:
+### Backend
 
 For running it locally:
 - .NET 8.0
@@ -88,15 +94,29 @@ You will be able to see in `build/docker-compose.public.yml` that the applicatio
 > [!TIP]
 > For local usage of the backend, you can use `docker-compose.local.yml` and edit the fields you need.
 
-### Admin panel:
+### Admin panel
 
-The admin panel is a simple React/Vite app. For development, it should be enough to run `vite` in Guestbooky-admin's `src` folder.
+The admin panel is a simple React app built through Vite.
 
-In order to create a live version, adjust the **API_URL** path in `Guestbooky-admin/src/environment/constants.js`, and execute `vite build`.
+If you haven't done so, the prerequisites are:
+
+- Node v18+
+- NPM or any other package manager
+- Vite
+
+Using [nvm](https://github.com/nvm-sh/nvm) should make things straightforward enough for your environment if you don't have Node up yet. Then do the usual `npm i` (or equivalent) in the Admin Panel's `src/Guestbooky-admin` folder and such to get the packages, which should include Vite.
+
+For development, it should be enough to run `vite` in Guestbooky-admin's `src` folder.
 
 ## 🚀 Deployment <a name = "deployment"></a>
 
+### Backend
+
 Use `docker-compose.public.yml` as a basis. it should create the image for you and start running.
+
+### Admin Panel
+
+In order to create a live version, adjust the **API_URL** path in `Guestbooky-admin/src/environment/constants.js`, and execute `vite build`. The application will be prepared and sent to `src/Guestbooky-admin/dist`. Send to your hosting solution and you should be good.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
