@@ -20,6 +20,8 @@ services:
     depends_on:
       - mongo
     restart: unless-stopped
+    networks:
+      - guestbooky
 
   mongo:
     image: mongo
@@ -33,8 +35,13 @@ services:
       - ./mongodb/mongod.conf:/etc/mongod.conf:ro
       - mongodata:/data/db
     command: ["mongod", "--config", "/etc/mongod.conf"]
-    ports:
-      - "27017:27017"
+    networks:
+      - guestbooky
+
 
 volumes:
   mongodata:
+
+networks:
+  guestbooky:
+    driver: bridge
