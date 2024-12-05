@@ -13,7 +13,7 @@ services:
       - mongodata:/data/db
     command: ["mongod", "--config", "/etc/mongod.conf"]
     ports:
-      - "27017:27017"
+      - "127.0.0.1:27017:27017"
 
   mongo-express:
     image: mongo-express
@@ -27,7 +27,7 @@ services:
     depends_on:
       - mongo
     ports:
-      - "8082:8081"
+      - "127.0.0.1:8082:8081"
 
 volumes:
   mongodata:
