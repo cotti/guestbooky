@@ -1,13 +1,13 @@
-db = db.getSiblingDB('Guestbooky');
+db = db.getSiblingDB(process.env.GUESTBOOKY_DB_NAME);
 
 db.createUser(
   {
-    user: "guestbookyuser",
-    pwd: "guestbookypassword",
+    user: process.env.GUESTBOOKY_USER,
+    pwd: process.env.GUESTBOOKY_PASSWORD,
     roles: [
       {
         role: "readWrite",
-        db: "Guestbooky"
+        db: process.env.GUESTBOOKY_DB_NAME
       }
     ]
   }

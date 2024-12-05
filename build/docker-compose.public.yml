@@ -6,17 +6,17 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - CORS_ORIGINS=https://guestbooky.example.com
-      - ACCESS_USERNAME=user
-      - ACCESS_PASSWORD=pass
-      - ACCESS_TOKENKEY=youbetterbesureyouareusingatokenkey
-      - ACCESS_ISSUER=https://guestbooky.example.com/api
-      - ACCESS_AUDIENCE=https://guestbooky.example.com
-      - CLOUDFLARE_SECRET=0x000000000000000000000000000000000
-      - MONGODB_CONNECTIONSTRING=mongodb://mongouser:mongopass@mongo:27017/Guestbooky
-      - MONGODB_DATABASENAME=Guestbooky
-      - LOG_LEVEL=Debug
+      ASPNETCORE_ENVIRONMENT: Production
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      ACCESS_USERNAME: ${ACCESS_USERNAME}
+      ACCESS_PASSWORD: ${ACCESS_PASSWORD}
+      ACCESS_TOKENKEY: ${ACCESS_TOKENKEY}
+      ACCESS_ISSUER: ${ACCESS_ISSUER}
+      ACCESS_AUDIENCE: ${ACCESS_AUDIENCE}
+      CLOUDFLARE_SECRET: ${CLOUDFLARE_SECRET}
+      MONGODB_CONNECTIONSTRING: mongodb://${GUESTBOOKY_USER}:${GUESTBOOKY_PASSWORD}@mongo:27017/${GUESTBOOKY_DB_NAME}
+      MONGODB_DATABASENAME: ${GUESTBOOKY_DB_NAME}
+      LOG_LEVEL: Debug
     depends_on:
       - mongo
     restart: unless-stopped
@@ -28,8 +28,11 @@ services:
     container_name: mongo
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      GUESTBOOKY_DB_NAME: ${GUESTBOOKY_DB_NAME}
+      GUESTBOOKY_USER: ${GUESTBOOKY_USER}
+      GUESTBOOKY_PASSWORD: ${GUESTBOOKY_PASSWORD}
     volumes:
       - ./mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - ./mongodb/mongod.conf:/etc/mongod.conf:ro
@@ -38,6 +41,37 @@ services:
     networks:
       - guestbooky
 
+  cron:
+    image: mcuadros/ofelia:latest
+    container_name: ofelia-cron
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./docker-compose.yml:/etc/docker-compose.yml:ro
+    labels:
+      ofelia.job-run.backup: "0 0 * * * docker-compose -f /etc/docker-compose.yml run --rm backup-job"
+    networks:
+      - guestbooky
+    env_file:
+      - .env
+
+  backup-job:
+    container_name: mongo-backup-job
+    image: mongo
+    command: >
+      bash -c "mongodump
+      --host mongo
+      --db ${GUESTBOOKY_DB_NAME}
+      --username ${GUESTBOOKY_USER}
+      --password ${GUESTBOOKY_USER}
+      --authenticationDatabase ${GUESTBOOKY_DB_NAME}
+      --out /backups/guestbooky_$(date +\%Y-\%m-\%d)"
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - mongo
+    networks:
+      - guestbooky
 
 volumes:
   mongodata:

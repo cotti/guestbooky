@@ -43,4 +43,6 @@ ___
 - There isn't much exception handling, except in the API layer. This is on purpose. Another thing that this project could really use, but is left as an exercise, is using a `Maybe<T>/Result<T>/ErrorOr<T>` type.
   - Since there is so little that can go wrong with *low-stakes CRUDding*, it is a reasonable trade-off to let the API layer catch and send an internal server error.
 
-- By default, you need to choose between good Cookie-based authentication defaults or REST-friendly authentication via the `Authorization` header. Luckily you can support both with a few small additions - it made more sense to keep *RESTy* as the main method and stick Cookie support to its tail.
+- By default, you need to choose between good Cookie-based authentication defaults or REST-friendly authentication via the `Authorization` header. Luckily you can support both with a few small additions - it made more sense to keep *RESTy* as the main method and stick Cookie support to its tail
+  
+- I really, REALLY should have done a daily backup mechanism right from the start. And I should have done the `.env`-based variable configuration from the get-go, too.

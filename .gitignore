@@ -12,3 +12,4 @@ artifacts/
 build/docker-compose.yml
 build/mongodb/mongodata/
 src/Guestbooky/.vs/
+/build/.env

@@ -34,6 +34,7 @@
 - [🚀 Deployment ](#-deployment-)
   - [Backend](#backend-1)
   - [Admin Panel](#admin-panel-1)
+  - [Backup](#backup)
 - [⛏️ Built Using ](#️-built-using-)
 - [✍️ Authors ](#️-authors-)
 
@@ -65,20 +66,7 @@ For running it locally:
 - A Cloudflare turnstile secret key for the captcha
 - Not forgetting to set up environment variables
 
-You will be able to see in `build/docker-compose.public.yml` that the application makes heavy usage of them.
-```
-      - ASPNETCORE_ENVIRONMENT=Production
-      - CORS_ORIGINS=https://guestbook.example.com,http://localhost:5008,http://localhost:8080
-      - ACCESS_USERNAME=user
-      - ACCESS_PASSWORD=pass
-      - ACCESS_TOKENKEY=pleaseinsertafairlylargetokenkeyherewillyou
-      - ACCESS_ISSUER=https://guestbook.example.com/api
-      - ACCESS_AUDIENCE=https://guestbook.example.com
-      - CLOUDFLARE_SECRET=0x000000000000000000000000000000000
-      - MONGODB_CONNECTIONSTRING=mongodb://mongouser:mongopass@mongo:27017/Guestbooky
-      - MONGODB_DATABASENAME=Guestbooky
-      - LOG_LEVEL=Debug
-```
+There's a `.env.template` file with all environment variables used throughout the compose file.
 
 > [!IMPORTANT]
  You will need to set them up either by hand or by using your IDE's capabilities. On Visual Studio, that can be done via the Debug Properties of Guestbooky.API.
@@ -89,10 +77,10 @@ You will be able to see in `build/docker-compose.public.yml` that the applicatio
 |**CLOUDFLARE_SECRET**|The turnstile secret, used in the server portion of the captcha check.|
 |**MONGODB_\***|Related to the connection to MongoDB. Yeah.|
 |**LOG_\***|Logging.|
-
+|**GUESTBOOKY_**|Related to accessing the main document collection, which uses its own user.|
 
 > [!TIP]
-> For local usage of the backend, you can use `docker-compose.local.yml` and edit the fields you need.
+> For local usage of the backend, you can use `docker-compose.local.yml` which provides just what you need to run the backend yourself.
 
 ### Admin panel
 
@@ -112,11 +100,15 @@ For development, it should be enough to run `vite` in Guestbooky-admin's `src` f
 
 ### Backend
 
-Use `docker-compose.public.yml` as a basis. it should create the image for you and start running.
+Use `docker-compose.public.yml` as a basis, and remember to have a `.env` file ready. it should create the image for you and start running.
 
 ### Admin Panel
 
 In order to create a live version, adjust the **API_URL** path in `Guestbooky-admin/src/environment/constants.js`, and execute `vite build`. The application will be prepared and sent to `src/Guestbooky-admin/dist`. Send to your hosting solution and you should be good.
+
+### Backup
+
+Mongodump is run as a cron job daily. The behavior is customizable in `docker-compose.yml`
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
