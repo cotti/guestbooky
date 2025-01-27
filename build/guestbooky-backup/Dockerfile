@@ -7,7 +7,7 @@ COPY ../../src/Guestbooky-backup/ .
 
 RUN go mod download
 
-RUN go build -o guestbooky-backup cmd/guestbooky-backup/guestbooky-backup.go
+RUN CGO_ENABLED=0 go build -o guestbooky-backup cmd/guestbooky-backup/guestbooky-backup.go
 
 FROM alpine:latest  
 
