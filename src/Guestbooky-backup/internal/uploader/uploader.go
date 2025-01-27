@@ -24,12 +24,12 @@ func Upload(compactedFile string) error {
 
 	s3Client, err := createS3Client()
 	if err != nil {
-		return errors.New("failed to create S3 client")
+		return errors.New("failed to create S3 client: " + err.Error())
 	}
 
 	file, err := os.Open(compactedFile)
 	if err != nil {
-		return errors.New("failed to open file")
+		return errors.New("failed to open file: " + err.Error())
 	}
 	defer file.Close()
 
@@ -41,7 +41,7 @@ func Upload(compactedFile string) error {
 		Body:   file,
 	})
 	if err != nil {
-		return errors.New("failed to upload file")
+		return errors.New("failed to upload file: " + err.Error())
 	}
 
 	return nil
@@ -62,7 +62,7 @@ func createS3Client() (*S3Client, error) {
 
 	awsSession, err := session.NewSession(s3Config)
 	if err != nil {
-		return nil, errors.New("failed to create S3 session")
+		return nil, errors.New("failed to create S3 session: " + err.Error())
 	}
 
 	s3Client := s3.New(awsSession)
