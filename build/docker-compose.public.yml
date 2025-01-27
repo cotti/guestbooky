@@ -66,7 +66,7 @@ services:
       --username ${GUESTBOOKY_USER}
       --password ${GUESTBOOKY_USER}
       --authenticationDatabase ${GUESTBOOKY_DB_NAME}
-      --out ${BACKUP_SOURCE_PATH} && touch /backups/backup_done"
+      --out /backups/guestbooky_$(date +\%Y-\%m-\%d) && touch /backups/backup_done"
     volumes:
       - ./backups:/backups
     depends_on:
@@ -88,10 +88,9 @@ services:
       BACKUP_S3_SECRET_ID: ${BACKUP_S3_SECRET_ID}
       BACKUP_S3_ENDPOINT: ${BACKUP_S3_ENDPOINT}
       BACKUP_S3_REGION: ${BACKUP_S3_REGION}
-      BACKUP_SOURCE_PATH: ${BACKUP_SOURCE_PATH}
-      BACKUP_DESTINATION_PATH: ${BACKUP_SOURCE_PATH}.gzip
     volumes:
       - ./backups:/backups
+    command: sh -c "export BACKUP_SOURCE_PATH=/backups/guestbooky_$(date +\%Y-\%m-\%d) && export BACKUP_DESTINATION_PATH=/backups/guestbooky_$(date +\%Y-\%m-\%d).gzip && /root/guestbooky-backup"
 
 volumes:
   mongodata:

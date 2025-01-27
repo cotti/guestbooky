@@ -34,7 +34,7 @@ func Compact(source, destination string) error {
 	defer zipWriter.Close()
 
 	if _, err := io.Copy(zipWriter, originFileHandle); err != nil {
-		return errors.New("failed to copy file")
+		return errors.New("failed to copy zip to destination file: " + err.Error()) //nolint:wraperr
 	}
 
 	return nil
