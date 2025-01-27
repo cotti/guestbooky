@@ -50,6 +50,7 @@ services:
       - ./docker-compose.yml:/etc/docker-compose.yml:ro
     labels:
       ofelia.job-run.backup: "0 0 * * * docker-compose -f /etc/docker-compose.yml run --rm backup-job"
+      ofelia.job-run.upload: "0 0 * * * docker-compose -f /etc/docker-compose.yml run --rm upload"
     networks:
       - guestbooky
     env_file:
@@ -65,13 +66,32 @@ services:
       --username ${GUESTBOOKY_USER}
       --password ${GUESTBOOKY_USER}
       --authenticationDatabase ${GUESTBOOKY_DB_NAME}
-      --out /backups/guestbooky_$(date +\%Y-\%m-\%d)"
+      --out /backups/guestbooky_$(date +\%Y-\%m-\%d) && touch /backups/backup_done"
     volumes:
       - ./backups:/backups
     depends_on:
       - mongo
     networks:
       - guestbooky
+    healthcheck:
+      test: ["CMD", "test", "-f", "/backups/backup_done"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  upload:
+    image: cotti/guestbooky-backup
+    container_name: guestbooky-backup
+    environment:
+      BACKUP_S3_KEY_NAME: ${BACKUP_S3_KEY_NAME}
+      BACKUP_S3_ACCESS_ID: ${BACKUP_S3_ACCESS_ID}
+      BACKUP_S3_SECRET_ID: ${BACKUP_S3_SECRET_ID}
+      BACKUP_S3_ENDPOINT: ${BACKUP_S3_ENDPOINT}
+      BACKUP_S3_REGION: ${BACKUP_S3_REGION}
+      BACKUP_SOURCE_PATH: ${BACKUP_SOURCE_PATH}
+      BACKUP_DESTINATION_PATH: ${BACKUP_DESTINATION_PATH}.gzip
+    volumes:
+      - ./backups:/backups
 
 volumes:
   mongodata:
