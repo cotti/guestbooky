@@ -11,9 +11,9 @@ RUN go build -o guestbooky-backup cmd/guestbooky-backup/guestbooky-backup.go
 
 FROM alpine:latest  
 
-WORKDIR /root/
+WORKDIR /app
 
 COPY --from=builder /app/guestbooky-backup .
-RUN chmod +x guestbooky-backup
+RUN chmod +x /app/guestbooky-backup
 
-CMD ["./guestbooky-backup"]
+CMD ["./app/guestbooky-backup"]
